@@ -48,6 +48,7 @@
 
 #define INTERNAL_CLIENT_ID  "openziti"
 #define INTERNAL_TOKEN_TYPE "access_token"
+
 #define INTERNAL_SCOPES     "openid offline_access"
 
 
@@ -350,7 +351,8 @@ static void auth_cb(tlsuv_http_resp_t *http_resp, const char *err, json_object *
         tlsuv_parse_url(&uri, redirect);
         char *p = strstr(uri.query, "authRequestID=");
         p += strlen("authRequestID=");
-        req->id = strdup(p);
+        char *end = strchr(p, '&');
+        req->id = end ? portable_strndup(p, end - p) : strdup(p);
         char path[256] = {};
         if (!cstr_is_empty(&req->clt->jwt_token_auth)) {
             snprintf(path, sizeof(path),"/oidc/login/ext-jwt?id=%s", req->id);

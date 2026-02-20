@@ -481,6 +481,16 @@ void hexify(const uint8_t *bin, size_t bin_len, char sep, char **buf) {
 }
 
 
+char *portable_strndup(const char *s, size_t n) {
+    size_t len = strnlen(s, n);
+    char *new = (char *) malloc(len + 1);
+    if (new == NULL) {
+        return NULL;
+    }
+    new[len] = '\0';
+    return (char *) memcpy(new, s, len);
+}
+
 size_t str_split(const char *str, const char *delim, model_list *result) {
     size_t count = 0;
     if (str) {

@@ -561,8 +561,6 @@ static void on_ziti_event(ziti_context ztx, const ziti_event_t *event) {
     }
 }
 
-char *pxoxystrndup(const char *s, size_t n);
-
 const char *my_configs[] = {
         "all", NULL
 };
@@ -843,7 +841,7 @@ int run_proxy(struct run_opts *opts) {
     const char* intercept;
     MODEL_LIST_FOREACH(intercept, opts->intercepts) {
         char *p = strchr(intercept, ':');
-        char *service_name = pxoxystrndup(intercept, p - intercept);
+        char *service_name = portable_strndup(intercept, p - intercept);
 
         NEWP(l, struct listener);
         l->service_name = service_name;
@@ -929,12 +927,3 @@ int run_proxy(struct run_opts *opts) {
     exit(excode);
 }
 
-char *pxoxystrndup(const char *s, size_t n) {
-    size_t len = strnlen(s, n);
-    char *new = (char *) malloc(len + 1);
-    if (new == NULL) {
-        return NULL;
-    }
-    new[len] = '\0';
-    return (char *) memcpy(new, s, len);
-}

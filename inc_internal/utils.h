@@ -57,6 +57,8 @@ extern "C" {
 #define z_typeof(x) typeof(x)
 #endif
 #endif
+char *portable_strndup(const char *s, size_t n);
+
 extern const char *ziti_get_build_version(int verbose);
 
 extern const char *ziti_git_branch();
